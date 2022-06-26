@@ -1,16 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 
+import blueCandy from './images/blue-candy.png'
+import greenCandy from './images/green-candy.png'
+import orangeCandy from './images/orange-candy.png'
+import purpleCandy from './images/purple-candy.png'
+import redCandy from './images/red-candy.png'
+import yellowCandy from './images/yellow-candy.png'
+import blank from './images/blank.png'
+
 const width = 8;
 
 const candyColors = [
-  'blue',
-  'purple',
-  'green',
-  'yellow',
-  'red',
-  'black',
-  'orange' 
+  blueCandy,
+  purpleCandy,
+  greenCandy,
+  yellowCandy,
+  redCandy,
+  orangeCandy 
 ]
 
 
@@ -25,7 +32,7 @@ function App() {
       const columnOfFour = [i, i+ width, i + width*2, i + width*3]
       const decidedColors = currentColorArrangement[i]
       if (columnOfFour.every(square => currentColorArrangement[square] === decidedColors )) {
-        columnOfFour.forEach(square => currentColorArrangement[square] = '')
+        columnOfFour.forEach(square => currentColorArrangement[square] = blank)
         return true
       }
     }
@@ -38,7 +45,7 @@ function App() {
       const notValid = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64]
       if(!notValid.includes(i)) continue
       if (rowOfFour.every(square => currentColorArrangement[square] === decidedColors )) {
-        rowOfFour.forEach(square => currentColorArrangement[square] = '')
+        rowOfFour.forEach(square => currentColorArrangement[square] = blank)
         return true
       }
     }
@@ -49,7 +56,7 @@ function App() {
       const columnOfThree = [i, i+ width, i + width*2]
       const decidedColors = currentColorArrangement[i]
       if (columnOfThree.every(square => currentColorArrangement[square] === decidedColors )) {
-        columnOfThree.forEach(square => currentColorArrangement[square] = '')
+        columnOfThree.forEach(square => currentColorArrangement[square] = blank)
         return true
       }
     }
@@ -62,7 +69,7 @@ function App() {
       const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64]
       if(!notValid.includes(i)) continue
       if (rowOfThree.every(square => currentColorArrangement[square] === decidedColors )) {
-        rowOfThree.forEach(square => currentColorArrangement[square] = '')
+        rowOfThree.forEach(square => currentColorArrangement[square] = blank)
         return true
       }
     }
@@ -79,7 +86,7 @@ function App() {
       }
       if(currentColorArrangement[i + width] === '') {
         currentColorArrangement[i + width] = currentColorArrangement[i]
-        currentColorArrangement[i] = ''
+        currentColorArrangement[i] = blank
       }
     }
   }
@@ -162,6 +169,7 @@ function App() {
         {
           currentColorArrangement.map((color, index) => (
             <img
+              src={color}
               key={index}
               style={{backgroundColor: color}}
               alt={color}
