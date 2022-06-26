@@ -26,11 +26,12 @@ function App() {
       const decidedColors = currentColorArrangement[i]
       if (columnOfFour.every(square => currentColorArrangement[square] === decidedColors )) {
         columnOfFour.forEach(square => currentColorArrangement[square] = '')
+        return true
       }
     }
   }
 
-  const checkForRowofFour = () => {
+  const checkForRowOfFour = () => {
     for(let i=0; i < 64; i++) {
       const rowOfFour = [i, i+ 1, i + 2, i + 3]
       const decidedColors = currentColorArrangement[i]
@@ -38,6 +39,7 @@ function App() {
       if(!notValid.includes(i)) continue
       if (rowOfFour.every(square => currentColorArrangement[square] === decidedColors )) {
         rowOfFour.forEach(square => currentColorArrangement[square] = '')
+        return true
       }
     }
   }
@@ -48,11 +50,12 @@ function App() {
       const decidedColors = currentColorArrangement[i]
       if (columnOfThree.every(square => currentColorArrangement[square] === decidedColors )) {
         columnOfThree.forEach(square => currentColorArrangement[square] = '')
+        return true
       }
     }
   }
 
-  const checkForRowofThree = () => {
+  const checkForRowOfThree = () => {
     for(let i=0; i < 64; i++) {
       const rowOfThree = [i, i+ 1, i + 2, i + 3]
       const decidedColors = currentColorArrangement[i]
@@ -60,6 +63,7 @@ function App() {
       if(!notValid.includes(i)) continue
       if (rowOfThree.every(square => currentColorArrangement[square] === decidedColors )) {
         rowOfThree.forEach(square => currentColorArrangement[square] = '')
+        return true
       }
     }
   }
@@ -102,6 +106,34 @@ function App() {
     const squareBeingReplasedId = parseInt(squareBeingReplased.getAttribute('data-id'))
 
     currentColorArrangement[squareBeingReplasedId] = squareBeingDragged.style.backgroundColor
+    currentColorArrangement[squareBeingDraggedId] = squareBeingReplased.style.backgroundColor
+
+    const validMoves = [
+      squareBeingDragged - 1,
+      squareBeingDragged - width,
+      squareBeingDragged + 1,
+      squareBeingDragged + width
+    ]
+
+    const validMove = validMoves.includes(squareBeingReplasedId)
+
+    const isAOfColumnFour = checkForColumnOfFour()
+    const isAOfRowFour = checkForRowOfFour()
+    const isAOfColumnThree = checkForColumnOfThree()
+    const isAOfRowThree = checkForRowOfThree()
+
+    if(
+      squareBeingReplasedId && 
+      validMove && 
+      (isAOfColumnFour || isAOfRowFour || isAOfColumnThree || isAOfRowThree)) {
+        setSquareBeingDragged(null)
+        setSquareBeingReplased(null)
+      } 
+      else {
+        currentColorArrangement[squareBeingReplasedId] = squareBeingReplased.style.backgroundColor
+        currentColorArrangement[squareBeingDraggedId] = squareBeingDragged.style.backgroundColor
+        setCurrentColorArrangement([...currentColorArrangement])
+      }
   }
 
   
@@ -114,14 +146,14 @@ function App() {
   useEffect(() => {
     const timer = setInterval(() => {
       checkForColumnOfFour()
-      checkForRowofFour()
+      checkForRowOfFour()
       checkForColumnOfThree()
-      checkForRowofThree()
+      checkForRowOfThree()
       moveIntoSquareBelow()
       setCurrentColorArrangement([...currentColorArrangement])
-    }, 10000)
+    }, 100)
     return () => clearInterval(timer)
-  }, [checkForColumnOfFour, checkForRowofFour, checkForColumnOfThree, checkForRowofThree, moveIntoSquareBelow, currentColorArrangement])
+  }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, currentColorArrangement])
   
   console.log(currentColorArrangement);
   return (
